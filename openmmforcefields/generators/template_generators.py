@@ -238,7 +238,10 @@ class SmallMoleculeTemplateGenerator(object):
         from collections import defaultdict
         element_counts = defaultdict(int)
         for atom in molecule.atoms:
-            symbol = atom.element.symbol
+            try:
+                symbol = atom.element.symbol
+            except AttributeError:  # openff 0.11 API break
+                symbol = atom.symbol
             element_counts[symbol] += 1
             atom.name = symbol + str(element_counts[symbol])
 
